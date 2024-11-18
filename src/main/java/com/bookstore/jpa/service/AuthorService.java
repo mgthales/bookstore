@@ -50,7 +50,7 @@ private final BookRepository bookRepository;
         AuthorModel savedAuthor = authorRepository.save(author);
 
         // Retorna um novo `AuthorDto` baseado no `Author` salvo
-        return new AuthorDto(savedAuthor.getAuthor(), authorDto.books());
+        return new AuthorDto(savedAuthor.getAuthor());
     }
 
     public void deleteAuthorById(UUID id) {

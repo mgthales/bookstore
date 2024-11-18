@@ -1,8 +1,8 @@
 package com.bookstore.jpa.dto;
 
-import java.util.Set;
-import java.util.UUID;
+import jakarta.validation.constraints.NotBlank;
 
-public record AuthorDto(String author, Set<UUID> books) {
+public record AuthorDto(@NotBlank(message = "O campo 'author' não pode ser vazio ou nulo.")
+                        String author) {
 
 }

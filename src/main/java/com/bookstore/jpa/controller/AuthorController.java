@@ -3,6 +3,7 @@ package com.bookstore.jpa.controller;
 import com.bookstore.jpa.dto.AuthorDto;
 import com.bookstore.jpa.models.AuthorModel;
 import com.bookstore.jpa.service.AuthorService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,12 +38,20 @@ public class AuthorController {
     }
 
     @PostMapping
-    public ResponseEntity<AuthorDto> save(@RequestBody AuthorDto authorDto) {
-        AuthorDto savedAuthor = authorService.save(authorDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedAuthor);
+    public ResponseEntity<Object> save(@RequestBody @Valid AuthorDto authorDto) {
+        try {
+            AuthorDto savedAuthor = authorService.save(authorDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedAuthor);
+
+        } catch (NoSuchElementException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Erro ao Criar Author");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
     }
 
     @DeleteMapping("/{id}")
+    // @PathVarieble usado para fazer a requisicao do id pela URL.
     public ResponseEntity<String> delete(@PathVariable UUID id) {
         if (!authorService.findByIdAuthor(id).isPresent())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Author not found with ID " + id);
@@ -54,6 +63,7 @@ public class AuthorController {
         }
     }
     @PutMapping("/{id}")
+    // @PathVariable usado para fazer a requisicao do id pela Url.
     public ResponseEntity<AuthorModel> update(@PathVariable(value = "id") UUID id, @RequestBody AuthorModel authorModel) {
         Optional<AuthorModel> updatedAuthor = authorService.update(id, authorModel);
         if (updatedAuthor.isPresent()) {

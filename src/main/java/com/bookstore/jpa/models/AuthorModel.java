@@ -2,6 +2,7 @@ package com.bookstore.jpa.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -19,6 +20,7 @@ public class AuthorModel implements Serializable {
     private UUID id;
 
     @Column(unique = true, nullable = false)
+    @NotBlank(message = "O campo 'author' não pode ser vazio.")
     private String author;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
